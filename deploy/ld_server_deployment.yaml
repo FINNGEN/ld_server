@@ -1,0 +1,46 @@
+apiVersion: apps/v1beta1
+kind: StatefulSet
+metadata:
+  name: ld-server
+  labels:
+    app: ld-server
+spec:
+  serviceName: ld-server
+  selector:
+    matchLabels:
+      app: ld-server
+      tier: web
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: ld-server
+        tier: web
+    spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app
+                operator: In
+                values:
+                - ld-server
+            topologyKey: kubernetes.io/hostname
+      containers:
+      - name: ld-server-container
+        image: gcr.io/finngen-refinery-dev/ld_server:0.1.2
+        ports:
+        - containerPort: 8080
+        volumeMounts:
+        - mountPath: /mnt/ld
+          name: ld-server-pv
+  volumeClaimTemplates:
+  - metadata:
+      name: ld-server-pv
+    spec:
+      storageClassName: ""
+      accessModes: [ ReadWriteOnce ]
+      resources:
+        requests:
+          storage: 200Gi

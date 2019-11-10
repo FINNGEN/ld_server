@@ -1,0 +1,5 @@
+gunicorn~=20.0.0
+gevent~=1.4.0
+flask~=1.1.1
+flask-compress~=1.4.0
+pysam~=0.15.3

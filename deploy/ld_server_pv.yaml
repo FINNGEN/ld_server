@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: ld-server-pv-0
+spec:
+  capacity:
+      storage: 200Gi
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: ""
+  gcePersistentDisk:
+    fsType: ext4
+    pdName: ld-0
+  mountOptions:
+    - noatime
+    - nodiratime
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: ld-server-pv-ld-server-0
+spec:
+  storageClassName: ""
+  volumeName: ld-server-pv-0
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 200Gi
