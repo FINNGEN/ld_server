@@ -3,13 +3,18 @@ kind: Ingress
 metadata:
   name: ld-server
   annotations:
-    kubernetes.io/ingress.global-static-ip-name: finngen-ld
+    kubernetes.io/ingress.global-static-ip-name: finngen-api
   labels:
     app: ld-server
 spec:
-  backend:
-    serviceName: ld-server
-    servicePort: 80
+  rules:
+  - host: api.finngen.fi
+    http:
+      paths:
+      - backend:
+          serviceName: ld-server
+          servicePort: 80
+        path: /*
 ---
 apiVersion: v1
 kind: Service
