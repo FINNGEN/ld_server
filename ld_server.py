@@ -147,6 +147,7 @@ def parse_ld(data, cpra, r2_thresh, twk2cpra):
             break
     hdr = {h:i for i,h in enumerate(line.strip().split('\t'))}
     res = []
+    used = {}
     for line in data_iter:
         s = line.strip().split('\t')
         if float(s[hdr['R2']]) < r2_thresh:
@@ -164,7 +165,9 @@ def parse_ld(data, cpra, r2_thresh, twk2cpra):
                 temp = var1
                 var1 = var2
                 var2 = temp
-            res.append({'variation1': var1, 'variation2': var2, 'r2': round(float(s[hdr['R2']]), config['num_decimals']), 'd_prime': round(float(s[hdr['Dprime']]), config['num_decimals'])})
+            if var2 not in used:
+                res.append({'variation1': var1, 'variation2': var2, 'r2': round(float(s[hdr['R2']]), config['num_decimals']), 'd_prime': round(float(s[hdr['Dprime']]), config['num_decimals'])})
+                used[var2] = True
     return res
 
 @app.route('/')
