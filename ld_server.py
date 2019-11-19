@@ -29,15 +29,24 @@ class RequestException(Exception):
 
 def get_params():
     """
-    Parses query parameters: variant, window, panel
+    Parses query parameters: variant, window, panel, r2_thresh (optional)
     Returns a dict with cpra (list int,int,str,str), window (int), panel (str)
     Raises if bad parameters
     """
     variant = request.args.get('variant')
     window = request.args.get('window')
     panel = request.args.get('panel')
+    r2_thresh = request.args.get('r2_thresh')
+    if r2_thresh is None:
+        r2_thresh = 0
     if variant is None or window is None or panel is None:
         raise RequestException({'status': 400, 'message': 'required query parameters: variant, window, panel'})
+    try:
+        r2_thresh = float(r2_thresh)
+        if r2_thresh < 0 or r2_thresh > 1:
+            raise ValueError()
+    except ValueError as e:
+        raise RequestException({'status': 400, 'message': 'r2_thresh must be between 0 and 1'})
     cpra = re.split(cpra_re, variant)
     if len(cpra) != 4:
         raise RequestException({'status': 400, 'message': 'variant must be given as chr:pos:ref:alt'})
@@ -55,7 +64,7 @@ def get_params():
         raise RequestException({'status': 400, 'message': 'window must be between ' + str(config['window']['min']) + ' and ' + str(config['window']['max'])})
     if panel not in config['panels']:
         raise RequestException({'status': 400, 'message': 'supported panels: ' + ','.join(config['panels'].keys())})
-    return {'cpra': cpra, 'window': window, 'panel': panel}
+    return {'cpra': cpra, 'window': window, 'panel': panel, 'r2_thresh': r2_thresh}
 
 def get_region_mapping(cpra, window):
     """
@@ -127,7 +136,7 @@ def view_ld(cmd, twofile):
         subprocess.call(['rm', twofile])
     return out
 
-def parse_ld(data, cpra, twk2cpra):
+def parse_ld(data, cpra, r2_thresh, twk2cpra):
     """
     Parses the given tomahawk LD output using the given query variant and tomahawk_position-to-variant mapping
     Returns a list of dicts with keys variation1,variation2,r2,d_prime where variation1 is the query variant
@@ -140,6 +149,8 @@ def parse_ld(data, cpra, twk2cpra):
     res = []
     for line in data_iter:
         s = line.strip().split('\t')
+        if float(s[hdr['R2']]) < r2_thresh:
+            continue
         var1 = s[hdr['ridA']] + ':' + s[hdr['posA']]
         var2 = s[hdr['ridB']] + ':' + s[hdr['posB']]
         if var1 not in twk2cpra:
@@ -208,7 +219,7 @@ def ld():
         out = view_ld(cmd_view, tempfile)
     except RequestException as e:
         abort(e.args[0]['status'], e.args[0]['message'])
-    result['ld'] = parse_ld(out, cpra_str, mapping[1])
+    result['ld'] = parse_ld(out, cpra_str, params['r2_thresh'], mapping[1])
     t = round(time.time()-t, 3)
     app.logger.info('{} seconds viewing and parsing ld'.format(t))
     result['time_view'] = t
