@@ -3,15 +3,17 @@ Linkage disequilibrium server
 
 This repo contains LD server code, associated k8s deployment files and wdl workflows. We're running this with k8s at api.finngen.fi.
 
-API usage:
+The server code is in [ld_server.py](ld_server.py). LD is calculated with a [modified Tomahawk](https://github.com/FINNGEN/tomahawk). We're using the gunicorn server with [run.py](run.py).
+
+Docker image in [GCR](https://console.cloud.google.com/gcr/images/finngen-refinery-dev/GLOBAL/ld_server)
+
+## API usage
 
 The only endpoint currently is `/api/ld` used to get LD between a query variant and all variants within a base pair window.
 
 `http://api.finngen.fi/api/ld?variant=6:44693011:A:G&window=1000000&panel=sisu3&r2_thresh=0.9`
 
 `variant`, `window` and `panel` are required query parameters. `r2_thresh` is optional. Variant needs to be chr:pos:ref:alt. Can have chr prefix. X can be X or 23. Window size is limited in [config.py](config.py). Currently the sisu3 ~4000 Finns WGS imputation panel is supported (contains the same variants as imputed FinnGen data).
-
-The server code is in [ld_server.py](ld_server.py). LD is calculated with a [modified Tomahawk](https://github.com/FINNGEN/tomahawk). We're using the gunicorn server with [run.py](run.py).
 
 ## Creating a Docker image
 
