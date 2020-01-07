@@ -165,7 +165,7 @@ def parse_ld(data, cpra, r2_thresh, twk2cpra):
                 temp = var1
                 var1 = var2
                 var2 = temp
-            if var2 not in used:
+            if var1 == cpra and var2 not in used:
                 res.append({'variation1': var1, 'variation2': var2, 'r2': round(float(s[hdr['R2']]), config['num_decimals']), 'd_prime': round(float(s[hdr['Dprime']]), config['num_decimals'])})
                 used[var2] = True
     return res
