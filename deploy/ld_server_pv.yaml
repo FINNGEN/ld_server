@@ -11,7 +11,7 @@ spec:
   storageClassName: ""
   gcePersistentDisk:
     fsType: ext4
-    pdName: ld-0
+    pdName: ld-sisu3-sisu4
   mountOptions:
     - noatime
     - nodiratime

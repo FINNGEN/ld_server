@@ -6,7 +6,7 @@ ENV LC_ALL C.UTF-8
 ENV LANG C.UTF-8
 
 ADD requirements.txt /opt/ld_server/
-RUN apt update -y && apt install -y python3-pip && pip3 install -r /opt/ld_server/requirements.txt
+RUN apt update -y && apt install -y python3-pip && pip3 install cython && pip3 install -r /opt/ld_server/requirements.txt
 
 ADD run.py ld_server.py /opt/ld_server/
 
