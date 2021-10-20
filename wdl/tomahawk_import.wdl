@@ -13,10 +13,11 @@ task import_vcf {
     }
 
     runtime {
-        docker: "gcr.io/finngen-refinery-dev/tomahawk:beta-0.7.1-dirty-fg-v1"
+        docker: "eu.gcr.io/finngen-refinery-dev/tomahawk:beta-0.7.1-dirty-fg-v1"
         cpu: 1
         memory: "3G"
         disks: "local-disk 200 SSD"
+	zones: "europe-west1-b europe-west1-c europe-west1-d"
         preemptible: 1
     }
 }
@@ -40,10 +41,11 @@ task collect_mappings {
     }
 
     runtime {
-        docker: "gcr.io/finngen-refinery-dev/bioinformatics:0.5"
+        docker: "eu.gcr.io/finngen-refinery-dev/bioinformatics:0.7"
         cpu: 1
         memory: "3G"
         disks: "local-disk 200 SSD"
+	zones: "europe-west1-b europe-west1-c europe-west1-d"
         preemptible: 1
     }
 }
