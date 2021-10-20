@@ -74,6 +74,12 @@ kubectl create --save-config -f deploy/ld_server_pv.yaml
 kubectl create --save-config -f deploy/ld_server_deployment.yaml
 ```
 
-## WDL for converting VCF to TWK
+## WDL for converting imputation panel VCF to TWK
 
 Tomahawk uses a .twk format for storing genotypes. Use [wdl/tomahawk_import.wdl](wdl/tomahawk_import.wdl) and [wdl/tomahawk_import.json](wdl/tomahawk_import.json) to convert VCF to TWK.
+
+## Changelog
+
+0.1.5 initial release  
+0.1.6 fixed tabix threading issue (0932a43)  
+0.2.0 support for both sisu3 and sisu4 (73cad6e)
