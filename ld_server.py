@@ -22,7 +22,7 @@ app.logger.handlers = gunicorn_logger.handlers
 app.logger.setLevel(config['log_level'])
 
 cpra_re = re.compile('-|:|_')
-pos_tabix = pysam.TabixFile(config['position_mapping'], parser=None)
+pos_tabix = {panel: pysam.TabixFile(config['panels'][panel]['position_mapping'], parser=None) for panel in config['panels'].keys()}
 
 class RequestException(Exception):
     pass
@@ -66,16 +66,16 @@ def get_params():
         raise RequestException({'status': 400, 'message': 'supported panels: ' + ','.join(config['panels'].keys())})
     return {'cpra': cpra, 'window': window, 'panel': panel, 'r2_thresh': r2_thresh}
 
-def get_region_mapping(cpra, window):
+def get_region_mapping(cpra, panel, window):
     """
-    Gets tomahawk position for the query variant and a tomahawk_position-to-variant mapping for variants within the given window
+    Gets tomahawk position for the query variant and a tomahawk_position-to-variant mapping for variants in the given panel within the given window
     Returns a tuple (tomahawk chr:pos, dict from tomahawk chr:pos to chr:pos:ref:alt)
     Raises if variant not found
     """
     twk2cpra = {} # mapping from tomahawk positions chr:pos to actual variants chr:pos:ref:alt
     twk = None # tomahawk position of query variant
     s = cpra.split(':')
-    tabix_iter = pos_tabix.fetch(s[0], max(1,int(s[1])-round(window/2)-1), int(s[1])+round(window/2), parser=None)
+    tabix_iter = pos_tabix[panel].fetch(s[0], max(1,int(s[1])-round(window/2)-1), int(s[1])+round(window/2), parser=None)
     for row in tabix_iter:
         s = row.split('\t')
         if s[2] == cpra:
@@ -192,7 +192,7 @@ def ld():
     cpra_str = ':'.join([str(f) for f in cpra])
     t = time.time()
     try:
-        mapping = get_region_mapping(cpra_str, params['window'])
+        mapping = get_region_mapping(cpra_str, panel, params['window'])
     except RequestException as e:
         abort(e.args[0]['status'], e.args[0]['message'])
     t = round(time.time()-t, 3)
