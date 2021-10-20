@@ -8,7 +8,7 @@ spec:
   accessModes:
     - ReadWriteOnce
   persistentVolumeReclaimPolicy: Retain
-  storageClassName: ""
+  storageClassName: premium-rwo
   gcePersistentDisk:
     fsType: ext4
     pdName: ld-sisu3-sisu4
@@ -21,7 +21,7 @@ kind: PersistentVolumeClaim
 metadata:
   name: ld-server-pv-ld-server-0
 spec:
-  storageClassName: ""
+  storageClassName: premium-rwo
   volumeName: ld-server-pv-0
   accessModes:
     - ReadWriteOnce
