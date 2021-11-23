@@ -23,7 +23,7 @@ app.logger.handlers = gunicorn_logger.handlers
 app.logger.setLevel(config['log_level'])
 
 cpra_re = re.compile('-|:|_')
-pos_tabix = {panel: defaultdict(lambda: pysam.TabixFile(config['panels'][panel]['position_mapping'], parser=None)) for panel in config['panels'].keys()}
+pos_tabix = {panel: {} for panel in config['panels'].keys()}
 
 class RequestException(Exception):
     pass
@@ -76,6 +76,8 @@ def get_region_mapping(cpra, panel, window):
     twk2cpra = {} # mapping from tomahawk positions chr:pos to actual variants chr:pos:ref:alt
     twk = None # tomahawk position of query variant
     s = cpra.split(':')
+    if threading.get_ident() not in pos_tabix[panel]:
+        pos_tabix[panel][threading.get_ident()] = pysam.TabixFile(config['panels'][panel]['position_mapping'], parser=None)
     tabix_iter = pos_tabix[panel][threading.get_ident()].fetch(s[0], max(1,int(s[1])-round(window/2)-1), int(s[1])+round(window/2), parser=None)
     for row in tabix_iter:
         s = row.split('\t')
