@@ -82,4 +82,5 @@ Tomahawk uses a .twk format for storing genotypes. Use [wdl/tomahawk_import.wdl]
 
 0.1.5 initial release  
 0.1.6 fixed tabix threading issue (0932a43)  
-0.2.0 support for both sisu3 and sisu4 (7f2c886)
+0.2.0 support for both sisu3 and sisu4 (7f2c886)  
+0.2.1 fix a bug where all variants were mapped via sisu4 even if sisu3 was asked (da5c5e3)
