@@ -13,7 +13,7 @@ The only endpoint currently is `/api/ld` used to get LD between a query variant 
 
 `http://api.finngen.fi/api/ld?variant=6:44693011:A:G&window=1000000&panel=sisu3&r2_thresh=0.9`
 
-`variant`, `window` and `panel` are required query parameters. `r2_thresh` is optional. Variant needs to be chr:pos:ref:alt. Can have chr prefix. X can be X or 23. Window size is limited in [config.py](config.py). Currently sisu3 and sisu4 imputation panels are supported (contain the same variants as imputed FinnGen data: sisu3 until data freeze 7 and sisu4 from data freeze 8 onwards).
+`variant`, `window` and `panel` are required query parameters. `r2_thresh` is optional. Variant needs to be chr:pos:ref:alt. Can have chr prefix. X can be X or 23. Window size is limited in [config.py](config.py). Currently sisu3 (panel parameter value sisu3), sisu4 (panel parameter value sisu4) and sisu4.2 (panel parameter value sisu42) imputation panels are supported. These panels contain the same variants as imputed FinnGen data: sisu3 until data freeze 7, sisu4 in data freezes 8 and 9, sisu4.2 from data freeze 10 onwards.
 
 ## Creating a Docker image
 
@@ -24,17 +24,18 @@ docker push eu.gcr.io/finngen-refinery-dev/ld_server:VERSION
 
 ## Modifying the existing Kubernetes deployment
 
-kubectl is required. We're currently using a cluster called `ld` in `finngen-refinery-dev`.
+kubectl is required. We're currently using a cluster called `ld-server` in `finngen-refinery-dev`.
 
 To modify the existing deployment, e.g. after updating the Docker image in [deploy/ld_server_deployment.yaml](deploy/ld_server_deployment.yaml) or changing the disk in [deploy/ld_server_pv.yaml](deploy/ld_server_pv.yaml):
 
 ```
 gcloud config set project finngen-refinery-dev
-gcloud container clusters get-credentials ld
-kubectl config use-context gke_finngen-refinery-dev_europe-west1-b_ld
+gcloud container clusters get-credentials ld-server --zone europe-west1-b
+kubectl config use-context gke_finngen-refinery-dev_europe-west1-b_ld-server
 ```
 
 ```
+kubectl apply -f deploy/ld_server_pv.yaml
 kubectl apply -f deploy/ld_server_deployment.yaml
 kubectl delete pod ld-server-0
 ```
@@ -74,9 +75,9 @@ kubectl create --save-config -f deploy/ld_server_pv.yaml
 kubectl create --save-config -f deploy/ld_server_deployment.yaml
 ```
 
-## WDL for converting imputation panel VCF to TWK
+## Processing an imputation panel or other reference VCF
 
-Tomahawk uses a .twk format for storing genotypes. Use [wdl/tomahawk_import.wdl](wdl/tomahawk_import.wdl) and [wdl/tomahawk_import.json](wdl/tomahawk_import.json) to convert VCF to TWK.
+Tomahawk uses a .twk format for storing genotypes. If you want to add a new imputation panel or other reference, use the workflow [wdl/tomahawk_import.wdl](wdl/tomahawk_import.wdl) and [wdl/tomahawk_import.json](wdl/tomahawk_import.json) to convert VCFs to TWK. The workflow will also output a chromosome position tsv mapping file - Tomahawk requires single-allelic variants so we map multiallelic variant positions to artificial positions prior to running Tomahawk and then map back afterwards. After running the workflow, add the .twk and variant mapping .gz and .gz.tbi files to `config.py`.
 
 ## Changelog
 
