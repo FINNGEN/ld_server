@@ -158,9 +158,9 @@ def parse_ld(data, cpra, r2_thresh, twk2cpra):
         var1 = s[hdr['ridA']] + ':' + s[hdr['posA']]
         var2 = s[hdr['ridB']] + ':' + s[hdr['posB']]
         if var1 not in twk2cpra:
-            app.logger.warning(var1 + ' tomahawk position not in given mapping, this should not happen. Ignoring')
+            app.logger.warning(var1 + ' tomahawk position not in given mapping (query variant ' + cpra + '), this is an issue only if the position is not at the boundary of the window. Ignoring position')
         elif var2 not in twk2cpra:
-            app.logger.warning(var2 + ' tomahawk position not in given mapping, this should not happen. Ignoring')
+            app.logger.warning(var2 + ' tomahawk position not in given mapping (query variant ' + cpra + '), this is an issue only if the position is not at the boundary of the window. Ignoring position')
         else:
             var1 = twk2cpra[var1]
             var2 = twk2cpra[var2]
