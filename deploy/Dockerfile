@@ -1,11 +1,11 @@
-FROM eu.gcr.io/finngen-refinery-dev/tomahawk:beta-0.7.1-dirty-fg-v1-ubuntu18
+FROM eu.gcr.io/finngen-refinery-dev/tomahawk:beta-0.7.1-dirty-fg-v1-ubuntu22
 
 LABEL maintainer="jkarjala@broadinstitute.org"
 
 ENV LC_ALL C.UTF-8
 ENV LANG C.UTF-8
 
-RUN apt update -y && apt install -y python3-pip libffi6 libffi-dev && pip3 install cython
+RUN apt update -y && apt install -y python3-pip libffi7 libffi-dev && pip3 install cython
 ADD requirements.txt /opt/ld_server/
 RUN pip3 install -r /opt/ld_server/requirements.txt
 
