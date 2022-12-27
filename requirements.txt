@@ -1,6 +1,6 @@
-Jinja2~=3.0.2
+Jinja2~=3.1.2
 gunicorn~=20.1.0
-gevent~=1.4.0
-flask~=2.0.2
-flask-compress~=1.10.1
-pysam~=0.17.0
+gevent~=22.10.2
+flask~=2.2.2
+flask-compress~=1.13
+pysam~=0.20.0
