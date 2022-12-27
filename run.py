@@ -26,6 +26,9 @@ def run_gunicorn(app, args):
         'loglevel': args.loglevel,
         'timeout': 60,
         'worker_class': 'gevent',
+        'preload_app': True,
+        'max_requests': 100,
+        'max_requests_jitter': 10
     }
     sga = StandaloneGunicornApplication(app, options)
     sga.run()
