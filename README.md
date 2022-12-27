@@ -84,5 +84,5 @@ Tomahawk uses a .twk format for storing genotypes. If you want to add a new impu
 0.1.5 initial release  
 0.1.6 fixed tabix threading issue (0932a43)  
 0.2.0 support for both sisu3 and sisu4 (7f2c886)  
-0.2.1 fix a bug where all variants were mapped via sisu4 even if sisu3 was asked (da5c5e3)
+0.2.1 fix a bug where all variants were mapped via sisu4 even if sisu3 was asked (da5c5e3)  
 0.2.2 lower gunicorn worker memory usage by restarting workers every 100 requests (32fb731)
