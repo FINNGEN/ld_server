@@ -3,4 +3,5 @@ gunicorn~=20.1.0
 gevent~=22.10.2
 flask~=2.2.2
 flask-compress~=1.13
+flask_cors~=3.0.10
 pysam~=0.20.0
