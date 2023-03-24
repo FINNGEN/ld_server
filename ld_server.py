@@ -1,4 +1,5 @@
 from flask import Flask, jsonify, request, abort
+from flask_cors import CORS
 from flask_compress import Compress
 from collections import defaultdict
 import imp, logging, subprocess, shlex, re, sys, time, gzip, pysam, threading
@@ -6,6 +7,9 @@ from subprocess import CalledProcessError
 
 app = Flask(__name__)
 Compress(app)
+
+resources = {r"/api/*": {"origins": "*"}}
+cors = CORS(app, resources=resources)
 
 config = {}
 try:

@@ -1,4 +1,4 @@
-FROM eu.gcr.io/finngen-refinery-dev/tomahawk:beta-0.7.1-dirty-fg-v1-ubuntu22
+FROM eu.gcr.io/phewas-development/tomahawk:beta-0.7.1-dirty-fg-v1-ubuntu22
 
 LABEL maintainer="jkarjala@broadinstitute.org"
 
