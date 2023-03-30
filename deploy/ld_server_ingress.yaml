@@ -1,9 +1,22 @@
-apiVersion: extensions/v1beta1
+---
+apiVersion: networking.gke.io/v1beta1
+kind: FrontendConfig
+metadata:
+    name: frontend-config
+spec:
+  redirectToHttps:
+    enabled: true
+    responseCodeName: "308"
+---
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: ld-server
   annotations:
+    FrontConfig: "frontend-config"
     kubernetes.io/ingress.global-static-ip-name: finngen-api
+    networking.gke.io/managed-certificates: certificate-api-finngen-fi
+    kubernetes.io/tls-acme: "true"
   labels:
     app: ld-server
 spec:
@@ -12,9 +25,12 @@ spec:
     http:
       paths:
       - backend:
-          serviceName: ld-server
-          servicePort: 80
-        path: /*
+          service:
+            name: ld-server
+            port:
+              number: 80
+        pathType: Prefix
+        path: /
 ---
 apiVersion: v1
 kind: Service
