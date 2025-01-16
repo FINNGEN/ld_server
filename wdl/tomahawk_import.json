@@ -1,4 +1,4 @@
 {
-    "tomahawk_import.vcf_list": "gs://finngen-imputation-panel/sisu4.2_vcf_url.txt",
-    "tomahawk_import.collect_mappings.out_name": "sisu4.2_twk_mapping.tsv.gz"
+    "tomahawk_import.vcf_list": "gs://finngen-imputation-panel/sisu4.2_vcf_url.fixed_PAR.txt",
+    "tomahawk_import.collect_mappings.out_name": "sisu4.2_fixed_PAR.twk_mapping.tsv.gz"
 }
