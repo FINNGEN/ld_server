@@ -12,6 +12,11 @@ panels = {
         'position_mapping': '/mnt/ld/sisu4/sisu4_twk_mapping.txt.gz',
         'file_template': '/mnt/ld/sisu4/chr[CHROMOSOME]_phased_SNPID.twk',
         'X_in_filename': '23'
+    },
+    'sisu42': {
+        'position_mapping': '/mnt/ld/sisu42/sisu4.2_twk_mapping.tsv.gz',
+        'file_template': '/mnt/ld/sisu42/v4.2.chr[CHROMOSOME]_phased_SNPID.twk',
+        'X_in_filename': '23'
     }
 }
 
