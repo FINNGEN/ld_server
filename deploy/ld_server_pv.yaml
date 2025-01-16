@@ -11,7 +11,7 @@ spec:
   storageClassName: premium-rwo
   gcePersistentDisk:
     fsType: ext4
-    pdName: ld-sisu3-sisu4-sisu42
+    pdName: ld-sisu3-sisu4-sisu42-parok
   mountOptions:
     - noatime
     - nodiratime
